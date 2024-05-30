@@ -15,6 +15,7 @@ const data = await db.order.aggregate({
     }
 }
 
+
 async function getCustomerData () {
     const [userCount, orderData] = await Promise.all([
         db.user.count(),

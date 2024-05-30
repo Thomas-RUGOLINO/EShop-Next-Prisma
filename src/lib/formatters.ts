@@ -1,7 +1,7 @@
 const CURRENCY_FORMATTER = new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR',
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 2,
 });
 
 export function formatCurrency(amount: number) {

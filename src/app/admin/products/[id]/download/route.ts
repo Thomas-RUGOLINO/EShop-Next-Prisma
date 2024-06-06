@@ -2,6 +2,8 @@ import db from "@/db/db";
 import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
+
+
 export async function GET(req: NextRequest, {params : {id}}:{params: {id: string}}) {
 
   const product = await db.product.findUnique({

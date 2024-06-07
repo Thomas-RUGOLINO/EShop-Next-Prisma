@@ -1,10 +1,18 @@
 import db from "@/db/db";
-import { NextRequest } from "next/server";
+import PurchaseReceiptEmail from "@/email/PurchaseReceipt";
+import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 import Stripe from "stripe";
+
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
-export async function POST(req: NextRequest, {params: {id}}: {params: {id: string}}) {
+
+const resend = new Resend(process.env.RESEND_API_KEY as string)
+
+
+export async function POST(req: NextRequest) {
     const event = await stripe.webhooks.constructEvent(
         await req.text(),
         req.headers.get("stripe-signature") as string,
@@ -42,6 +50,14 @@ export async function POST(req: NextRequest, {params: {id}}: {params: {id: strin
                 expiresAt : new Date(Date.now() + 1000*60*60*24),
             },
         })
+        await resend.emails.send({
+          from: `Support <${process.env.SENDER_EMAIL}>`,
+          to: email,
+          subject: "Your order confirmation",
+          react : <PurchaseReceiptEmail product={product} order={order} downloadVerificationId={downloadVerification.id}/>,
 
+        })
    }
+
+   return new NextResponse()
 }

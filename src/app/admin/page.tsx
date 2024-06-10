@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import db from "@/db/db";
 import { formatNumber, formatCurrency } from "@/lib/formatters";
+import { OrderByDayChart } from "./_components/charts/OrderByDayChart";
 
 
 async function getSalesData () {
@@ -50,7 +51,9 @@ export default async function AdminDashboard () {
         getProductData()
     ])
   
-   return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+   return (
+    <>
+   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardCard
             title="Sales"
             description={`${formatNumber(salesData.numberOfSales)} Orders`}
@@ -69,6 +72,18 @@ export default async function AdminDashboard () {
             body={formatNumber(productData.activeCount)}
             />
     </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
+    <Card>
+        <CardHeader>
+            <CardTitle>Total Sales</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <OrderByDayChart />
+        </CardContent>
+    </Card>
+    </div>
+    </>
+   )
 }
 
 type DashboardCardProps = {
